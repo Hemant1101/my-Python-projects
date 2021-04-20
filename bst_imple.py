@@ -1,3 +1,28 @@
+class Queue(object):
+    def __init__(self):
+        self.items = []
+
+    def enque(self, data):
+        self.items.insert(0, data)
+
+    def deque(self):
+        if not self.is_empty():
+            return self.items.pop()
+
+    def is_empty(self):
+        return len(self.items) == 0
+
+    def peek(self):
+        if not self.is_empty():
+            return self.items[-1].key
+
+    def __len__(self):
+        return self.size()
+
+    def size(self):
+        return len(self.items)
+
+
 class BST(object):
     def __init__(self, value=None):
         self.key = value
@@ -22,6 +47,7 @@ class BST(object):
                 self.right = BST(data)
 
     def print_tree(self, order):
+        print(order+" :")
         if order == "preorder":
             print(self.pre_order(""))
             return
@@ -30,6 +56,9 @@ class BST(object):
             return
         elif order == "postorder":
             print(self.post_order(""))
+            return
+        elif order == "levelorder":
+            print(self.level_order())
             return
         else:
             print("invalid")
@@ -56,6 +85,22 @@ class BST(object):
         if self.right:
             travarsal = self.right.post_order(travarsal)
         travarsal += (str(self.key)+" ")
+        return travarsal
+
+    def level_order(self):
+        if self is None:
+            return
+
+        q = Queue()
+        q.enque(self)
+        travarsal = ""
+        while len(q) > 0:
+            travarsal += (str(q.peek())+" ")
+            node = q.deque()
+            if node.left:
+                q.enque(node.left)
+            if node.right:
+                q.enque(node.right)
         return travarsal
 
     def search_bst(self, data):
@@ -107,6 +152,20 @@ class BST(object):
             self.right = self.right.delete(node.key)
         return self
 
+    def min_node(self):
+        current = self
+        while (current.left):
+            current = current.left
+        data = current.key
+        return data
+
+    def max_node(self):
+        current = self
+        while (current.right):
+            current = current.right
+        data = str(current.key)
+        return data
+
 
 tree = BST()
 l = list(map(int, input("Enter the values to insert in BST:\n").split()))
@@ -118,3 +177,6 @@ tree.print_tree("postorder")
 d = int(input("Enter the value to delete: "))
 tree = tree.delete(d)
 tree.print_tree("preorder")
+tree.print_tree("levelorder")
+print("Min value in tree:",tree.min_node())
+print("Max value in tree:",tree.max_node())
