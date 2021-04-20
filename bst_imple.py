@@ -165,6 +165,17 @@ class BST(object):
             current = current.right
         data = str(current.key)
         return data
+    
+    def height(self):
+        if self is None:
+            return -1
+        left_hieght = -1
+        right_hieght = -1
+        if self.left:
+            left_hieght = self.left.height()
+        if self.right:
+            right_hieght = self.right.height()
+        return 1+max(left_hieght, right_hieght)
 
 
 tree = BST()
@@ -180,3 +191,4 @@ tree.print_tree("preorder")
 tree.print_tree("levelorder")
 print("Min value in tree:",tree.min_node())
 print("Max value in tree:",tree.max_node())
+print("Hieght of the tree:", tree.height())
